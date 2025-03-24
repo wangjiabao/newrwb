@@ -2336,6 +2336,18 @@ func (uuc *UserUseCase) AdminAll(ctx context.Context, req *v1.AdminAllRequest) (
 	var (
 		totalDeposit int64
 	)
+	var (
+		configs      []*Config
+		originBprice int64
+	)
+	configs, _ = uuc.configRepo.GetConfigByKeys(ctx, "b_price")
+	if nil != configs {
+		for _, vConfig := range configs {
+			if "b_price" == vConfig.KeyName {
+				originBprice, _ = strconv.ParseInt(vConfig.Value, 10, 64)
+			}
+		}
+	}
 
 	var (
 		rewards []*Reward
@@ -2457,11 +2469,15 @@ func (uuc *UserUseCase) AdminAll(ctx context.Context, req *v1.AdminAllRequest) (
 		totalStake += v.Amount
 	}
 
+	tmp2 := float64(0)
+	if 0 < originBprice {
+		tmp2 = float64(totalDeposit / originBprice)
+	}
 	return &v1.AdminAllReply{
 		TotalUser:            totalUser,
 		TodayTotalUser:       todayUser,
 		TotalDepositRwb:      strconv.FormatInt(totalDeposit, 10),
-		TotalDestroyRwb:      strconv.FormatInt(totalDeposit, 10),
+		TotalDestroyRwb:      fmt.Sprintf("%.2f", tmp2),
 		AllLocation:          fmt.Sprintf("%.2f", totalAmountUsdt),
 		TodayRewardRsdt:      fmt.Sprintf("%.2f", TodayRewardRsdt),
 		TodayRewardRsdtOther: fmt.Sprintf("%.2f", TodayRewardRsdtOther),
