@@ -1020,7 +1020,7 @@ func (uuc *UserUseCase) AdminRecordList(ctx context.Context, req *v1.RecordListR
 		if _, ok := users[v.UserId]; !ok {
 			continue
 		}
-		tmpCoinType := "RAW"
+		tmpCoinType := "USDT"
 		res.Locations = append(res.Locations, &v1.RecordListReply_LocationList{
 			CreatedAt:  v.CreatedAt.Add(8 * time.Hour).Format("2006-01-02 15:04:05"),
 			Address:    users[v.UserId].Address,
