@@ -2976,7 +2976,7 @@ func (ui *UserInfoRepo) UpdateUserRewardAreaTwo(ctx context.Context, userId int6
 func (ui *UserInfoRepo) UpdateUserNewTwoNewThree(ctx context.Context, userId int64, amount uint64, last int64, coinType string) error {
 	if err := ui.data.DB(ctx).Table("user_balance").
 		Where("user_id=?", userId).
-		Updates(map[string]interface{}{"balance_raw_float": float64(amount)}).Error; nil != err {
+		Updates(map[string]interface{}{"balance_usdt_float": float64(amount)}).Error; nil != err {
 		return errors.NotFound("user balance err", "user balance not found")
 	}
 
